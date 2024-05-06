@@ -1,3 +1,10 @@
+/*
+20210014 : Ahmed Hanfy
+20210082 : Aya Ashraf
+20210163 : Sama Ahmed
+20210210 : Abdelrhman Mostafa
+20211048 : Salma Abdelaziz
+*/
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>
@@ -19,11 +26,11 @@ int F(int n) //recursion function
 struct Call
 {
     int n; // parameter
-    int a, b, c; // local variables
+    int a, b; // local variables
     int cur_loc; // location of next statement to be executed
 };
 
-int G(int n) // Non−recursive version of F()
+int G(int n) // Non-recursive version of F()
 {
     Call initial_call;
     initial_call.n = n;
@@ -45,7 +52,7 @@ int G(int n) // Non−recursive version of F()
             }
             else
             {
-                // Make new child call F(n−1) and push to stack
+                // Make new child call F(n-1) and push to stack
                 Call new_call;
                 new_call.cur_loc = 0;
                 new_call.n = call.n - 1;
@@ -69,13 +76,13 @@ int G(int n) // Non−recursive version of F()
         }
         else if (call.cur_loc == 2)
         {
-            // c = 7 * F(n/2)
-            call.c = 7 * last_ret_val;
+            // a = n * F(n-1) + 7 * F(n/2)
+            call.a += 7 * last_ret_val;
 
             // Make new child call F(n-3-a%2) and push to onto stack
             Call new_call;
             new_call.cur_loc = 0;
-            new_call.n = call.n - 3 - ((call.a + call.c) % 2);
+            new_call.n = call.n - 3 - call.a % 2;
             st.push(new_call);
             // Update current location inside parent call
             call.cur_loc = 3;
@@ -86,13 +93,11 @@ int G(int n) // Non−recursive version of F()
             // b = F(n-3-a%2)
             call.b = last_ret_val;
             // Call finished, save return value and pop stack
-            // the final result a + b + c
-            last_ret_val = call.a + call.c + call.b;
+            // the final result a + b
+            last_ret_val = call.a + call.b;
             st.pop();
         }
     }
-
-
     return last_ret_val;
 }
 
@@ -100,12 +105,11 @@ int G(int n) // Non−recursive version of F()
 
 int main()
 {
-    int n ;
+    int n;
     for (n = 1; n <= 20; n++)
     {
         cout << "G(" << n << ") = " << G(n) << endl;
-        cout << "F(" << n << ") = " << F(n) << endl<<endl;
+        cout << "F(" << n << ") = " << F(n) << endl << endl;
     }
-
     return 0;
 }
